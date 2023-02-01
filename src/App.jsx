@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
+
 
 const TURNS = {
   X: 'X',
@@ -8,22 +8,36 @@ const TURNS = {
 }
 
 const Square = ({children, isSelected, updateBoard, index}) => {
+  
+  const evento = ()=>{
+    updateBoard(index);
+  }
+  console.log("isSelected:"+isSelected)
+  console.log("index:"+index)
   const className = `square ${isSelected ? 'is-selected' : ''}`
   return(
-    <div className={className}>
+    <div onClick={evento} className={className}>
         {children}
     </div>
   )
 }
 
-
-
-
 function App() {
-  
-const [ board, setBoard ] = useState(Array(9).fill(null));
-const [ turno, setTurno ] = useState(TURNS.X)
 
+  const [ board, setBoard ] = useState(Array(9).fill(null));
+  const [ turno, setTurno ] = useState(TURNS.X)
+  
+  const updateBoard = (index) => {
+    const newBoard = [...board]
+    newBoard[index] = turno;
+    setBoard(newBoard)
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>")
+    console.log(...board)
+    console.log(index)
+    const newTurn = turno === TURNS.X ? TURNS.O : TURNS.X
+    setTurno(newTurn)
+  }
+  
   return (
     <main className='board'>
       <h1> Tres en Raya </h1>
@@ -31,7 +45,9 @@ const [ turno, setTurno ] = useState(TURNS.X)
         {
           board.map((_, index)=>{
             return(
-             <Square key={index} index={index}>
+             <Square key={index} 
+                     index={index}
+                     updateBoard={updateBoard}>
                 {board[index]}
               </Square>
             )
